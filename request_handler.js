@@ -1,34 +1,22 @@
+var controllers = require('./controller');
 var querystring = require('querystring');
 var url = require('url');
+var formidable = require('formidable');
 
-var ok = function(response,message)
-{
-	response.writeHead(200,{'Content-Type':'text/plain'});
-	if( typeof(message) !== 'undefined' )
-	{
-		response.write(message);
-	}
-	response.end();
-};
-var redirect = function(response,destination)
-{
-	response.writeHead(303,{'Location' : destination});
-	response.end();
-}
 var getQuery = function(request)
 {
 	return querystring.parse(url.parse(request.url).query);
-};
-
+}
 
 // HANDLERS
-var actions = {
+var controller = new controllers.Controller();
+controller.actions = { 
 	test_form : function(request,response)
 	{
 		if( typeof(request.POST) !== 'undefined' )
 		{
 			console.log(request.POST);
-			redirect(response,'/test_form');
+			controller.redirect(response,'/test_form');
 		}
 		else
 		{
@@ -44,7 +32,7 @@ var actions = {
 var handle = function(request,response)
 {
 	var pathname = (url.parse(request.url).pathname).replace(/^\/(.*)/,'$1');
-	if( typeof(actions[pathname]) === 'function' )
+	if( typeof(controller.actions[pathname]) === 'function' )
 	{
 		console.log('Routing to handler:'+ pathname);
 		// Handle and inject GET data into request object
@@ -60,12 +48,12 @@ var handle = function(request,response)
 			request.addListener('end',function() {
 				var post_object = querystring.parse(post_data);
 				request['POST'] = post_object;
-				actions[pathname](request,response);
+				controller.actions[pathname](request,response);
 			});
 		}
 		else
 		{
-			actions[pathname](request,response);
+			controller.actions[pathname](request,response);
 		}
 	}
 	else
