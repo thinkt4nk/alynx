@@ -13,6 +13,23 @@ Controller.prototype = {
 		}
 		response.end();
 	},
+	actionNotFound : function(response,pathname)
+	{
+		if( typeof(pathname) !== 'undefined' ) {
+			console.log('Could not find the requested action:' + pathname);
+		}
+		response.writeHead(404);
+		response.end();
+	},
+	render_json : function(response,object)
+	{
+		response.writeHead(200,{'Content-Type':'application/json'});
+		if( typeof(object) !== 'undefined' )
+		{
+			response.write(JSON.stringify(object));
+		}
+		response.end();
+	},
 	redirect : function(response,destination)
 	{
 		response.writeHead(303,{'Location' : destination});
