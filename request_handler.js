@@ -1,6 +1,5 @@
 var querystring = require('querystring');
 var url = require('url');
-var formidable = require('formidable');
 
 var getQuery = function(request)
 {
