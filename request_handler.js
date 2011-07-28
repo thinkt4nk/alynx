@@ -1,4 +1,3 @@
-var Controller = require('./controller').Controller;
 var querystring = require('querystring');
 var url = require('url');
 var formidable = require('formidable');
@@ -8,26 +7,7 @@ var getQuery = function(request)
 	return querystring.parse(url.parse(request.url).query);
 }
 
-var controller = new Controller();
-// HANDLERS
-controller.actionTestForm = function(request,response)
-{
-	if( typeof(request.POST) !== 'undefined' )
-	{
-		console.log(request.POST);
-		this.redirect(response,'/testForm');
-	}
-	else
-	{
-		// output form
-		response.writeHead(200,{'Content-Type':'text/html'});
-		response.write('<html><head></head><body><form action="" method="POST"><label>name</label><input name="name" type="text" /><br /><label>age</label><input type="text" name="age" /><br /><input type="submit" value="Submit" /></form></body></html>');
-		response.end();
-	}
-};
-
-
-var handle = function(request,response)
+var handle = function(request,response,controller)
 {
 	// convention: http://www.myapi.com/uploadPhotos => function actionUploadPhotos
 	var pathname = (url.parse(request.url).pathname).replace(/^\/(.*)/,'$1');
