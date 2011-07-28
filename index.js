@@ -2,6 +2,7 @@ var server = require('./server.js');
 var router = require('./router.js');
 var Controller = require('./controller').Controller;
 
+// instantiate controller
 var controller = new Controller();
 // HANDLERS
 controller.actionTestForm = function(request,response)
